@@ -165,6 +165,47 @@ def glue_convert_examples_to_features(
 
     return features
 
+class BoolqProcessor(DataProcessor):
+    """Processor for the BoolQ data set (GLUE version)"""
+
+    def get_example_from_tensor_dict(self, tensor_dict):
+        """See base class."""
+        return InputExample(
+            tensor_dict["idx"].numpy(),
+            tensor_dict["passage"].numpy().decode("utf-8"),
+            tensor_dict["question"].numpy().decode("utf-8"),
+            str(tensor_dict["label"].numpy()),
+        )
+
+    def get_train_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "train.jsonl")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "dev.jsonl")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["false", "true"]
+
+    def _create_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            if i == 0:
+                continue
+            guid = "%s-%s" % (set_type, line["idx"])
+            try:
+                text_a = line["passage"]
+                text_b = line["question"]
+                label = line["label"]
+            except IndexError:
+                continue
+            examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return examples
+
+
 
 class MrpcProcessor(DataProcessor):
     """Processor for the MRPC data set (GLUE version)."""
@@ -517,6 +558,7 @@ class WnliProcessor(DataProcessor):
 
 
 glue_tasks_num_labels = {
+    "boolq": 2,
     "cola": 2,
     "mnli": 3,
     "mrpc": 2,
@@ -529,6 +571,7 @@ glue_tasks_num_labels = {
 }
 
 glue_processors = {
+    "boolq": BoolqProcessor,
     "cola": ColaProcessor,
     "mnli": MnliProcessor,
     "mnli-mm": MnliMismatchedProcessor,
@@ -542,6 +585,7 @@ glue_processors = {
 }
 
 glue_output_modes = {
+    "boolq": "classification",
     "cola": "classification",
     "mnli": "classification",
     "mnli-mm": "classification",
