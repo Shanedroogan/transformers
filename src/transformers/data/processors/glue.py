@@ -187,14 +187,14 @@ class BoolqProcessor(DataProcessor):
 
     def get_dev_examples(self, data_dir):
         """See base class."""
-        return self._create_examples(self._read_tsv(os.path.join(data_dir, "val.jsonl")), "dev")
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "val.jsonl")), "val")
 
     def get_labels(self):
         """See base class."""
         return [False, True]
 
     def _create_examples(self, lines, set_type):
-        """Creates examples for the training and dev sets."""
+        """Creates examples for the training and val sets."""
         examples = []
         for (i, line) in enumerate(lines):
             if i == 0:
