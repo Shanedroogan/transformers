@@ -197,6 +197,7 @@ class BoolqProcessor(DataProcessor):
                 continue
             guid = "%s-%s" % (set_type, i)
             try:
+                print(line[0])
                 text_a = line[0]["passage"]
                 text_b = line[0]["question"]
                 label = line[0]["label"]
