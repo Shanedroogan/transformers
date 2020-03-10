@@ -172,6 +172,7 @@ class BoolqProcessor(DataProcessor):
 
     def get_example_from_tensor_dict(self, tensor_dict):
         """See base class."""
+        print(tensor_dict)
         return InputExample(
             tensor_dict["idx"].numpy(),
             tensor_dict["passage"].numpy().decode("utf-8"),
@@ -181,6 +182,7 @@ class BoolqProcessor(DataProcessor):
 
     def get_train_examples(self, data_dir):
         """See base class."""
+        logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "train.jsonl")), "train")
 
     def get_dev_examples(self, data_dir):
