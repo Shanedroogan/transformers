@@ -92,8 +92,7 @@ def glue_convert_examples_to_features(
             logger.info("Writing example %d/%d" % (ex_index, len_examples))
 
         inputs = tokenizer.encode_plus(example.text_a, example.text_b, add_special_tokens=True, max_length=max_length,)
-        print(inputs)
-        input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
+        input_ids, token_type_ids = inputs["input_ids"], inputs["attention_mask"]
 
         # The mask has 1 for real tokens and 0 for padding tokens. Only real
         # tokens are attended to.
@@ -199,7 +198,7 @@ class BoolqProcessor(DataProcessor):
         for (i, line) in enumerate(lines):
             if i == 0:
                 continue
-            print(line)
+            line = loads(line[0])
             guid = "%s-%s" % (set_type, i)
             try:
                 text_a = line["passage"]
