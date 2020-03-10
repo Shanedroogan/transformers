@@ -207,6 +207,7 @@ class BoolqProcessor(DataProcessor):
                 label = line["label"]
             except IndexError:
                 continue
+            print(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
             examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
