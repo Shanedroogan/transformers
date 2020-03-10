@@ -172,7 +172,7 @@ class BoolqProcessor(DataProcessor):
 
     def get_example_from_tensor_dict(self, tensor_dict):
         """See base class."""
-        print(tensor_dict)
+
         return InputExample(
             tensor_dict["idx"].numpy(),
             tensor_dict["passage"].numpy().decode("utf-8"),
@@ -191,7 +191,7 @@ class BoolqProcessor(DataProcessor):
 
     def get_labels(self):
         """See base class."""
-        return ["false", "true"]
+        return ["0", "1"]
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""
@@ -207,7 +207,6 @@ class BoolqProcessor(DataProcessor):
                 label = line["label"]
             except IndexError:
                 continue
-            print(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
             examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
