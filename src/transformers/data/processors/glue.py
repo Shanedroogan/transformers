@@ -92,7 +92,7 @@ def glue_convert_examples_to_features(
             logger.info("Writing example %d/%d" % (ex_index, len_examples))
 
         inputs = tokenizer.encode_plus(example.text_a, example.text_b, add_special_tokens=True, max_length=max_length,)
-        input_ids, token_type_ids = inputs["input_ids"], inputs["attention_mask"]
+        input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
 
         # The mask has 1 for real tokens and 0 for padding tokens. Only real
         # tokens are attended to.
@@ -182,11 +182,13 @@ class BoolqProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
         logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
-        return self._create_examples(self._read_tsv(os.path.join(data_dir, "train.jsonl")), "train")
+        with open(os.path.join(data_dir, "train.jsonl"), "r") as f:
+            return self._create_examples(f.read().splitlines(), "train")
 
     def get_dev_examples(self, data_dir):
         """See base class."""
-        return self._create_examples(self._read_tsv(os.path.join(data_dir, "val.jsonl")), "val")
+        with open(os.path.join(data_dir, "val.jsonl"), "r") as f:
+            return self._create_examples(f.read().splitlines()), "val")
 
     def get_labels(self):
         """See base class."""
@@ -198,7 +200,7 @@ class BoolqProcessor(DataProcessor):
         for (i, line) in enumerate(lines):
             if i == 0:
                 continue
-            line = loads(line[0])
+            line = loads(line)
             guid = "%s-%s" % (set_type, i)
             try:
                 text_a = line["passage"]
