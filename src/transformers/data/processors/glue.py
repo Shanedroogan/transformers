@@ -181,11 +181,11 @@ class BoolqProcessor(DataProcessor):
 
     def get_train_examples(self, data_dir):
         """See base class."""
-        return self._create_examples(self._read_json(os.path.join(data_dir, "train.jsonl")), "train")
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "train.jsonl")), "train")
 
     def get_dev_examples(self, data_dir):
         """See base class."""
-        return self._create_examples(self._read_json(os.path.join(data_dir, "dev.jsonl")), "dev")
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "dev.jsonl")), "dev")
 
     def get_labels(self):
         """See base class."""
@@ -197,6 +197,7 @@ class BoolqProcessor(DataProcessor):
         for (i, line) in enumerate(lines):
             if i == 0:
                 continue
+            line = loads(line[0])
             guid = "%s-%s" % (set_type, line["idx"])
             try:
                 text_a = line["passage"]
