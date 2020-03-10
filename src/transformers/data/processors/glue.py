@@ -17,7 +17,7 @@
 
 import logging
 import os
-import json
+from json import loads
 
 from ...file_utils import is_tf_available
 from .utils import DataProcessor, InputExample, InputFeatures
@@ -198,7 +198,7 @@ class BoolqProcessor(DataProcessor):
                 continue
             guid = "%s-%s" % (set_type, i)
             try:
-                line = line[0].json()
+                line = loads(line[0])
                 text_a = line["passage"]
                 text_b = line["question"]
                 label = line["label"]
