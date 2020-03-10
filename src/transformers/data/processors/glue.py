@@ -197,10 +197,10 @@ class BoolqProcessor(DataProcessor):
                 continue
             guid = "%s-%s" % (set_type, i)
             try:
-                print(type(line[0]))
-                text_a = line[0]["passage"]
-                text_b = line[0]["question"]
-                label = line[0]["label"]
+                line = line[0].json()
+                text_a = line["passage"]
+                text_b = line["question"]
+                label = line["label"]
             except IndexError:
                 continue
             examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
